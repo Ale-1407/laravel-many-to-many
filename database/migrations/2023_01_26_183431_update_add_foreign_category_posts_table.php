@@ -14,7 +14,7 @@ class UpdateAddForeignCategoryPostsTable extends Migration
     public function up()
     {
         // Schema::table('posts', function (Blueprint $table) {
-        //     $table->unsignedBigInterger('category_id')->nullable();
+        //     $table->unsignedBigInteger('category_id')->nullable();
         //     $table->foreign('category_id')->references('id')->on('categories')->onDelete('set null');
         // });
     }
