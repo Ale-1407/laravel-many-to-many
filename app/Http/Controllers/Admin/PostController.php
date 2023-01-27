@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Tag;
 use App\Category;
 use App\Post;
 use App\Http\Controllers\Controller;
@@ -29,8 +30,9 @@ class PostController extends Controller
     public function create()
     {
         $categories = Category::All();
+        $tags = Tag::All();
 
-        return view('admin.posts.create', compact('categories'));
+        return view('admin.posts.create', compact('categories', 'tags'));
     }
 
     /**
@@ -52,6 +54,10 @@ class PostController extends Controller
         $newPost = new Post;
         $newPost->fill($data);
         $newPost->save();
+
+        if( array_key_exists('tags', $data) ){
+            $newPost->tags()->sync( $data['tags'] );
+        }
 
         return redirect()->route('admin.posts.index');
     }
@@ -80,7 +86,9 @@ class PostController extends Controller
 
         $categories = Category::All();
 
-        return view('admin.posts.edit', compact('post', 'categories'));
+        $tags = Tag::All();
+
+        return view('admin.posts.edit', compact('post', 'categories', 'tags'));
     }
 
     /**
