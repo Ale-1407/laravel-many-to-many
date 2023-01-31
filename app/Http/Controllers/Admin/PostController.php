@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers\Admin;
 
+
 use App\Tag;
 use App\Category;
 use App\Post;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class PostController extends Controller
 {
@@ -52,6 +54,11 @@ class PostController extends Controller
         ]);
 
         $newPost = new Post;
+        //controllo se l'immagine è stata caricata nell'input
+        if( array_key_exists('image', $data) ){
+            $cover_url = Storage::put('post_covers', $data['image']);
+            $data['cover'] = $cover_url;
+        }
         $newPost->fill($data);
         $newPost->save();
 
