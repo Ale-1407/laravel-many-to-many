@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
-
+use App\Mail\CreatePostMail;
 use App\Tag;
 use App\Category;
 use App\Post;
@@ -66,6 +66,11 @@ class PostController extends Controller
             $newPost->tags()->sync( $data['tags'] );
         }
 
+        //invio email di creazione
+        $mail = new createPostMail();
+        $email_utente = Auth::user()->email;
+        Mail::to($email_utente)->send($mail);
+
         return redirect()->route('admin.posts.index');
     }
 
@@ -124,6 +129,9 @@ class PostController extends Controller
     public function destroy($id)
     {
         $singolo_post = Post::findOrFail($id);
+        if($singolo_post->cover){
+            Storage::delete($singolo_post->cover);
+        }
         $singolo_post->delete();
 
         return redirect()->route('admin.posts.index');
