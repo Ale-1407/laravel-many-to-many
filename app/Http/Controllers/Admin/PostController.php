@@ -9,6 +9,8 @@ use App\Post;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 
 class PostController extends Controller
 {
@@ -67,7 +69,7 @@ class PostController extends Controller
         }
 
         //invio email di creazione
-        $mail = new createPostMail();
+        $mail = new CreatePostMail($newPost);
         $email_utente = Auth::user()->email;
         Mail::to($email_utente)->send($mail);
 
